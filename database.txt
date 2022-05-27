@@ -1,0 +1,125 @@
+Create database bms;
+Use database bms;
+
+CREATE TABLE customer_details
+(
+	customer_id int  UNIQUE NOT NULL AUTO_INCREMENT,
+	name varchar(100) NOT NULL,
+	father_name varchar(100),
+	mother_name varchar(100),	
+	sex varchar(100) ,
+	dob varchar(100) NOT NULL,
+	Mobile_number  bigint  NOT NULL,
+	account_type varchar(100) NOT NULL,
+	account_number int(8) NOT NULL UNIQUE ,
+	id_type varchar(100),
+	branch varchar(100) NOT NULL,
+	occupation varchar(100),
+	permanent_add varchar(100) NOT NULL,
+	temproray_add varchar(100),
+	deposit_amount int,
+	id_num bigint,
+	PRIMARY KEY (customer_id)
+   );
+
+
+
+
+CREATE TABLE withdraw_table
+(
+	withdraw_id int NOT NULL UNIQUE AUTO_INCREMENT,
+	customer_id int ,
+	current_amount int,
+	withdraw_amount int NOT NULL,
+	withdrawn_by varchar(100),
+	withdraw_date date DEFAULT CURDATE() ,
+	PRIMARY KEY (withdraw_id),
+	FOREIGN KEY (customer_id) REFERENCES customer_details(customer_id)
+
+);
+
+CREATE TABLE deposit_table
+(
+	deposit_id int NOT NULL UNIQUE AUTO_INCREMENT,
+	customer_id int ,
+	current_amount int,
+	deposit_amount int NOT NULL,
+	deposit_by varchar(100),
+	deposit_date date DEFAULT CURDATE() ,
+	PRIMARY KEY (deposit_id),
+	FOREIGN KEY (deposit_id) REFERENCES customer_details(customer_id)
+);
+
+
+CREATE TABLE transfer_table
+(   
+    transfer_id int NOT NULL UNIQUE AUTO_INCREMENT,
+    customer_id int,
+    current_amount int(10),
+    amount_to_send int(10) NOT NULL,
+    transfer_to varchar(25) NOT NULL, 
+    recieved_by varchar(25) NOT NULL, 
+    transfer_date date DEFAULT CURDATE() ,
+    PRIMARY KEY (transfer_id),
+    FOREIGN KEY (customer_id) REFERENCES customer_details(customer_id)
+ );
+
+CREATE TABLE loan_table
+(
+	loan_id int NOT NULL UNIQUE AUTO_INCREMENT,
+  	customer_id int NOT NULL,
+    	loan_amount int(10) NOT NULL,
+    	paid_by varchar(100) NOT NULL,
+	date date DEFAULT CURDATE() ,
+	PRIMARY KEY (loan_id),
+	FOREIGN KEY (customer_id) REFERENCES customer_details(customer_id)
+
+);
+
+
+
+CREATE TABLE transaction_statements
+(
+	transaction_id int NOT NULL UNIQUE AUTO_INCREMENT,
+	customer_id int NOT NULL,
+	transaction_date date DEFAULT CURDATE() ,
+	operation varchar(100) NOT NULL,
+	amount int NOT NULL,
+	performed_by varchar(100) NOT NULL,
+	transfered_to varchar(100) NOT NULL,
+	issued_by varchar(100) NOT NULL,
+	PRIMARY KEY (transaction_id),
+	FOREIGN KEY (customer_id) REFERENCES customer_details(customer_id)
+
+
+);
+
+CREATE TABLE staff_only 
+(
+  staff_id int NOT NULL UNIQUE AUTO_INCREMENT,
+  name varchar(100) NOT NULL,
+  username varchar(50) NOT NULL,
+  password varchar(50) NOT NULL,
+  mobile bigint  NOT NULL,
+  email varchar(50) NOT NULL,
+  position varchar(50) NOT NULL,
+  Join_date date NOT NULL,
+  address varchar(100) NOT NULL
+);
+
+ALTER TABLE loan_table
+ADD pending_amount bigint;
+
+ALTER TABLE loan_table
+ADD registered_by Varchar(22);
+
+#manually creating the entries into staff_only table to implement login window
+
+INSERT INTO `staff_only` (`id`, `name`, `username`, `password`, `mobile`, `email`, `position`, `Join_date`, `id_number`, `address`) VALUES(1, 'ABC', 'ABC', 'ABC', '123456789', 'abc@gmail.com', 'Teller', '2070-01-30', '2087/33 delhil'),(2, 'XYZ', 'XYZ', 'XYZ', '9876543210', 'xyz@gmail.com', 'Manager', '2073-02-22', '422045/740,delhi');
+ 
+#manually creating the entries into customer_details table to apply functionalities
+
+Insert into customer_details(‘customer_id’,’name’,’father_name’,’mother_name’,’sex’,’dob’,’mobile_number’,’account_type’,’id_type’,’occupation’,’account_number’,’branch’,’permanent_add’,’temproray_add’,’deposit_amount’,’id_num’) 
+VALUES(‘1’,‘abc’, ‘abc’,’abc’,’male’,’1234-12-12’,’987654321’,’Saving’,’Student’,’Student’,’10001’,’delhi’,’xyz’,’xyz’,’15426’,’1’ );
+
+
